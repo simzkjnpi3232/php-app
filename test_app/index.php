@@ -14,6 +14,10 @@ require_once('functions.php'); //追記
        <p>新規作成</p>
      </a>
   </div>
+  <!-- 初期アクセスページ
+新規作成のリンクを押すとnew.phpに遷移します。
+新規作成のリンク
+-->
   <div>
     <table>
       <tr>
@@ -22,11 +26,15 @@ require_once('functions.php'); //追記
         <th>更新</th>
         <th>削除</th>
       </tr>
+      
       <?php foreach (getTodoList() as $todo): ?>
+        
         <tr>
           <td><?= $todo['id']; ?></td>
           <td><?= $todo['content']; ?></td>
+       
           <td>
+
             <a href="">更新</a>
           </td>
           <td>
@@ -41,3 +49,5 @@ require_once('functions.php'); //追記
   </div>
 </body>
 </html>
+
+

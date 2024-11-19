@@ -17,7 +17,11 @@ function errorHandler($errNo, $errStr, $errFile, $errLine)
 
     return false;
 }
+//エラーハンドラーはエラーを出すおまじない
 
 define('DSN', 'mysql:dbname=php_lesson;host=localhost;unix_socket=/tmp/mysql.sock');
 define('DB_USER', 'root');
 define('DB_PASSWORD', 'smzkjnpi3232');
+//↑3行はDBに接続するための設定で定数定義している
+//接続情報は変化しないので定数として定義
+//第一引数が定数名、第二引数が定数の値
