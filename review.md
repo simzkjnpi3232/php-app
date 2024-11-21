@@ -92,3 +92,31 @@ todosテーブルから、削除されていないレコードを全件配列で
 - 物理削除
   - メリット：不要なデータが蓄積せず、コードを単純化できる
   - デメリット：削除したデータの復旧はできない
+
+### 口頭レビュー課題
+
+## getRefererPath()の説明（各変数var_dump()してくる）
+- $urlArray
+  - データ型：array型
+  - { ["scheme"]=> string(4) "http" ["host"]=> string(9) "localhost" ["port"]=> int(9999) ["path"]=> string(9) "/edit.php" ["query"]=> string(5) "id=13" }
+  - paese_url()関数で返されたURLの構成要素（スキーム、ホスト名、パスなど）を保持する連想配列
+
+- $_SERVER['HTTP_REFERER']
+  - データ型：string型
+  - "http://localhost:9999/edit.php?id=13"
+  - URL
+
+- $urlArray['path']
+  - データ型：string型
+  - "/edit.php"
+  - ・パス
+
+- 補足メモ
+  - paese_url()関数：関数は、URL を解析して、その構成要素を連想配列として返す PHP の組み込み関数
+  - $_SERVER：サーバーや実行環境に関する情報を保持する連想配列
+
+## getTodoTextById() を変数を一度も使わずに実装
+function getTodoTextById($id)
+{
+    return (connectPdo()->query('SELECT * FROM todos WHERE deleted_at IS NULL AND id =' . $id)->fetch())['content'];
+}
