@@ -30,14 +30,9 @@ function savePostedData($post)
     }
 }
 
-//リクエスト元のページのパスで条件分岐をし、処理を振り分け
-//新規作成ページからPOSTされたなら、createTodoData関数 を実行（INSERT処理
-//編集ページからPOSTされたなら、updateTodoData関数 を実行（UPDATE処理）
-
 function getRefererPath()
 {
     $urlArray = parse_url($_SERVER['HTTP_REFERER']);
     return $urlArray['path'];
 }
 
-//リクエスト元のURLを文字列で取得しそのパスを返す
