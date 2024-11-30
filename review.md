@@ -8,6 +8,9 @@
 <a href="edit.php?todo_id=123&todo_content=焼肉">更新</a>
 ```
 
+- 下記の値が格納されます。
+  - $_GET = ['todo_id' => '123','todo_content' => '焼肉'];
+
 ### 以下のフォームの送信ボタンを押下した際にstore.phpの$_POSTにどんな値が格納されるか説明してください。
 
 ```html
@@ -18,44 +21,102 @@
 </form>
 ```
 
+- 下記の値が格納されます。
+  - $_POST = ['id' => '123','content' => '焼肉'];
+
 ### `require_once()` は何のために記述しているか説明してください。
+- 中のファイルを読み込み、中に記載あるものが使用するため。
 
 ### `savePostedData($post)`は何をしているか説明してください。
+- getRefererPath関数のページのパスで条件分岐をし、処理を振り分けています。
 
 ### `header('location: ./index.php')`は何をしているか説明してください。
+- リダイレクトを実行するための関数
+  - 新しいURLへリダイレクトするよう指示、指定されたURL（ここでは ./index.html）に移動
 
 ### `getRefererPath()`は何をしているか説明してください。
+- リクエスト元のURLを文字列で取得しそのパスを返します。
 
 ### `connectPdo()` の返り値は何か、またこの記述は何をするための記述か説明してください。
+- `connectPdo()` の返り値はPDO クラスのインスタンスです。また、この記述はPDOを用いてデータベースに接続する処理を実行しています。
 
 ### `try catch`とは何か説明してください。
+- tryとcatchは例外処理を行うための構文になります。
+  - 例外が発生する可能性がある処理をtry{ }に書く
+  - 例外が発生時の処理をcatch{ }に書く
 
 ### Pdoクラスをインスタンス化する際に`try catch`が必要な理由を説明してください。
+- データベース接続時に発生する可能性のあるエラーを処理するためです。
 
 ## 新規作成
 
 ### `createTodoData($post)`は何をしているか説明してください。
+- createTodoData関数が受け取った$postのデータをもとにToDoリストのデータをデータベースに保存しています。
 
 ## 一覧
 
 ### `getTodoList()`の返り値について説明してください。
+- getAllRecords()の返り値がgetTodoList()の返り値となっています。
+  - getAllRecords()では、
+todosテーブルから、削除されていないレコードを全件配列で取得しています。
 
 ### `<?= ?>`は何の省略形か説明してください。
+- `<?php echo ?>`の省略形です。
 
 ## 更新
 
 ### `getSelectedTodo($_GET['id'])`の返り値は何か、またなぜ`$_GET['id']` を引数に渡すのか説明してください。
 
 ### `updateTodoData($post)`は何をしているか説明してください。
+- queryメソッド でSQL文を実行することで、データが更新されます。
 
 ## 削除
 
 ### `deleteTodoData($id)`は何をしているか説明してください。
+- queryメソッド でSQL文を実行することで、データが論理削除されます。
 
 ### `deleted_at`を現在時刻で更新すると一覧画面からToDoが非表示になる理由を説明してください。
+- 論理削除のDB処理でdeleted_atカラムに削除した時間を「このレコードはこの時間に削除しましたよ」という意味で保存しているためです。
 
 ### 今回のように実際のデータを削除せずに非表示にすることで削除されたように扱うことを〇〇削除というか。
+- 論理削除
 
 ### 実際にデータを削除することを〇〇削除というか。
+- 物理削除
 
 ### 前問のそれぞれの削除のメリット・デメリットについて説明してください。
+- 各削除のメリットとデメリットは下記になります。
+- 論理削除
+  - メリット：元の状態に戻すことができる
+  - デメリット：延々とデータが蓄積されていく
+- 物理削除
+  - メリット：不要なデータが蓄積せず、コードを単純化できる
+  - デメリット：削除したデータの復旧はできない
+
+### 口頭レビュー課題
+
+## getRefererPath()の説明（各変数var_dump()してくる）
+- $urlArray
+  - データ型：array型
+  - { ["scheme"]=> string(4) "http" ["host"]=> string(9) "localhost" ["port"]=> int(9999) ["path"]=> string(9) "/edit.php" ["query"]=> string(5) "id=13" }
+  - paese_url()関数で返されたURLの構成要素（スキーム、ホスト名、パスなど）を保持する連想配列
+
+- $_SERVER['HTTP_REFERER']
+  - データ型：string型
+  - "http://localhost:9999/edit.php?id=13"
+  - URL
+
+- $urlArray['path']
+  - データ型：string型
+  - "/edit.php"
+  - ・パス
+
+- 補足メモ
+  - paese_url()関数：関数は、URL を解析して、その構成要素を連想配列として返す PHP の組み込み関数
+  - $_SERVER：サーバーや実行環境に関する情報を保持する連想配列
+
+## getTodoTextById() を変数を一度も使わずに実装
+function getTodoTextById($id)
+{
+    return (connectPdo()->query('SELECT * FROM todos WHERE deleted_at IS NULL AND id =' . $id)->fetch())['content'];
+}
